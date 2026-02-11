@@ -1,24 +1,28 @@
 # Python Console Games 🎮
 
-A Python console-based multi-game project created to practice programming fundamentals, logic building, and project structuring.
+A modular Python console-based multi-game project build to strengthen programming fundamentals and structured development practices.
 
-This project contains multiple text-based games that run in the terminal and are connected through a main menu.
+This project contains multiple text-based games that run in the terminal and demonstrate clean code organization, file handling, and basic object-oriented design.
 
 ---
 
 ## 🕹️ Games Included
 
 1. **Guess the Number**
-   - A simple number guessing game using random number generation.
-   - Focuses on loops, conditions, and user input handling.
+   - Random number guessing game
+   - Difficulty modes
+   - Life system
+   - Score tracking
 
 2. **Kaun Banega Lakhpati (KBL)**
-   - A quiz-based game inspired by KBC.
-   - Uses questions, options, scoring, and game flow control.
+   - Quiz-based game inspired by KBC
+   - Dictionary-driven question structure
+   - Progressive scoring system
 
 3. **Text Adventure Game**
-   - A choice-based adventure game using scenes and transitions.
-   - Demonstrates the use of dictionaries, classes, and state management.
+   - Scene-based choice adventure
+   - State management
+   - Branching logic
 
 ---
 
@@ -38,12 +42,14 @@ python-console-games/
 
 ## 🛠️ Concepts Used
 
-- Functions and modular programming
-- Conditional statements and loops
-- Dictionaries and lists
-- File handling (JSON for storing scores)
-- Classes and object-oriented basics
-- Code organization and refactoring
+   - Modular programming
+   - Funtions and return values
+   - Dictionaries and lists
+   - JSON file handling
+   - Error handling(try/except)
+   - Basic OOP concepts
+   - Code separation across modules
+   - Git & GitHub workflow
 
 ---
 

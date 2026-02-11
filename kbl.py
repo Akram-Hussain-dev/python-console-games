@@ -1,91 +1,211 @@
-# kaun banega lakhpati game logic
+# Import required modules
 import time
-from score import update_score# Importing the update_score function
+from score import update_score
 
-def sawal(s):
-    print(s, "sawal apke computer screen par")  # For displaying the question number
+# Define quiz questions
+scene=[
+    {
+        "Question":"which of these following fruits is known as the king of fruits?",
+        "Options":{
+            "A":"Mango",
+            "B":"Apple",
+            "C":"Orange",
+            "D":"Guava"
+        },
+        "Answer":"A",
+        "Price":1000,
+    },
+    {
+        "Question":"In Which City is the Red Fort Located?",
+        "Options":{
+            "A":"Mumbai",
+            "B":"Delhi",
+            "C":"Kolkata",
+            "D":"Chennai"
+        },
+        "Answer":"B",
+        "Price":3000,                      
+    },
+    {
+        "Question":"Which of the following is the largest planet in our solar system?",
+        "Options":{
+            "A":"Earth",
+            "B":"Mars",
+            "C":"Jupiter",
+            "D":"Saturn"
+        },
+        "Answer":"C",
+        "Price":7500,                      
+    },
+    {
+        "Question":"What is the chemical symbol for gold?",
+        "Options":{
+            "A":"Au",
+            "B":"Ag",
+            "C":"Fe",
+            "D":"Hg"
+        },
+        "Answer":"A",
+        "Price":15000,
+    },
+    {
+        "Question":"Which of the following is the largest mammal on Earth?",
+        "Options":{
+            "A":"Elephant",
+            "B":"Blue Whale",
+            "C":"Giraffe",
+            "D":"Hippopotamus"
+        },
+        "Answer":"B",
+        "Price":35000,
+    },
+    {
+        "Question":"What is the colour of an octopus's blood?",
+        "Options":{
+            "A":"Red",
+            "B":"Green",
+            "C":"Blue",
+            "D":"Yellow"
+        },
+        "Answer":"C",
+        "Price":50000,
+    },
+    {
+        "Question":"With which religion would yoou associate the practice of 'Santhara' fasting unto death?",
+        "Options":{
+            "A":"Hinduism",
+            "B":"Buddhism",
+            "C":"Jainism",
+            "D":"Sikhism"
+        },
+        "Answer":"C",
+        "Price":76000,
+    },
+    {
+        "Question":" In Which year did the first successful cloning of a mammal, Dolly the sheep, take place?",
+        "Options":{
+            "A":"1995",
+            "B":"1996",
+            "C":"1997",
+            "D":"1998"
+        },
+        "Answer":"B",
+        "Price":100000,
+    },
+    {
+        "Question":"Which element has the highest melting point among all known elements?",
+        "Options":{
+            "A":"Gold",
+            "B":"Tungsten",
+            "C":"Carbon",
+            "D":"Iron"
+        },
+        "Answer":"C",
+        "Price":350000,
+    },
+    {
+        "Question":"Which of the following was not a member of the Constituent Assembly that drafted the Indian Constitution?",
+        "Options":{
+            "A":"Dr. B.R. Ambedkar",
+            "B":"Jawaharlal Nehru",
+            "C":"Sardar Patel",
+            "D":"C. Rajagopalachari"
+        },
+        "Answer":"B",
+        "Price":540000,
+    },
+    {
+        "Question":"Which of the following articles of the Indian Constitution cannot be suspended even during a National Emergency?",
+        "Options":{
+            "A":"Article 14",
+            "B":"Article 32",
+            "C":"Article 21",
+            "D":"Article 356"
+        },
+        "Answer":"C",
+        "Price":700000,
+    },
+    {
+        "Question":"Which ruler issued coins in the name of the Abbasid Caliphate to legitimize his rule?",
+        "Options":{
+            "A":"Sher Shah Suri",
+            "B":"Iltutmish",
+            "C":"Shivaji",
+            "D":"Tipu Sultan"
+        },
+        "Answer":"B",
+        "Price":1000000,
+    }
+]
 
-def ques(q):  # Function to display question and options
-    for line in q:
-        print(line)
+# Define Quiz class
+class Quiz:
+    # Initialize quiz
+    def __init__(self, scene):
+        self.scene = scene
+        self.score = 0
+        self.current_question_index = 0
+        self.player_name = None
+        self.completed = False
+
+    # Display current question
+    def display_question(self):
+        question_data = self.scene[self.current_question_index]
+        print(f"Question {self.current_question_index + 1}: {question_data['Question']}")
+        for option, answer in question_data['Options'].items():
+            print(f"{option}: {answer}")
+            time.sleep(0.5)
+
+    # Get user answer
+    def get_user_answer(self):
+        user_answer = input("Enter your answer (A/B/C/D): ").upper()
         time.sleep(0.5)
+        while user_answer not in ["A","B","C","D"]:
+            print("Invalid Option")
+            break
+        return user_answer
 
-def check(a):# Function to check the answer
-    i = input("Kis jawab koh lock kiya jae \nIsh khel se nikalne ke liye 'Quit' type kijiye\n:").upper()
-    if i == a:
-        print("Adbhud Sahi Jawab")
-        return True  
-    elif i == "Quit":
-        print("Dhanyawaad apko kaun Banega Lakhpati ke adbhud khel ka hissa banne ke liye")
-        return None
-    else:
-        print("Afsos galat jawab")
-        return False
+    # Check if answer is correct
+    def check_answer(self, user_answer):
+        correct_answer = self.scene[self.current_question_index]['Answer']
+        if user_answer == correct_answer:
+            self.score += self.scene[self.current_question_index]['Price']
+            print("Correct! Your score is now:", self.score)
+            time.sleep(1)
+            return True
+        else:
+            print("Wrong! The correct answer was:", correct_answer)
+            time.sleep(1)
+            return False
 
+
+    # Move to next question
+    def next_question(self):
+        self.current_question_index += 1
+        if self.current_question_index < len(self.scene):
+            return True
+        else:
+            return False
+
+    # Start the quiz
+    def start_quiz(self):
+        self.player_name = input("Enter your name to start the quiz: ")
+        while True:
+            self.display_question()
+            user_answer = self.get_user_answer()
+            if not self.check_answer(user_answer):
+                break
+            if not self.next_question():
+                self.completed = True
+                break
+        update_score("Kaun Banega Lakhpati", self.player_name, self.score)
+        if self.completed:
+            print("Congrates apne Kaun Banega Lakhpati jeet liya! \nApka Din Shubh Ho!")
+        else:
+            print("Better luck next time!")
+        time.sleep(2)
+
+# Main function for KBL game
 def kbl():
-    Total = 0
-    print("Swagat hai apka ish 'Kaun Banega Lakhpati' ke adbhut khel mein")
-    sawal("Phela")
-    time.sleep(1)
-    q1 = ["What is the national fruit of India", "Option A: Orange", "Option B: Gossebery", "Option C: Mango", "Option D: Coconut"]
-    ques(q1)
-    r = check("C")  # r is used for storing return value from check function
-    Total += 10000
-    print("Apne", Total, "Dhanrashi prapt ki hain")
-    time.sleep(2)
-    if r != True:  # If the ans is wrong or player wanna quit
-        print("Apka Din Shubh ho")
-        update_score("Kaun Banega Lakhpati", Total)
-        return
-    sawal("Dusra")
-    time.sleep(3)
-    q2 = ["What Square of 12", "Option A: 124", "Option B: 144", "Option C: 154", "Option D: 114"]
-    ques(q2)
-    r = check("B")
-    Total += 20000
-    print("Apne", Total, "Dhanrashi prapt ki hain")
-    time.sleep(2)
-    if r != True:# If the ans is wrong or player wanna quit
-        print("Apka Din Shubh ho")
-        update_score("Kaun Banega Lakhpati", Total)
-        return
-    sawal("Tisra")
-    time.sleep(3)
-    q3 = ["what is the 1th element of Group 10 in periodic table", "Option A: Nickel", "Option B: Carbon", "Option C: Iron", "Option D: Titanium"]
-    ques(q3)
-    r = check("A")
-    Total += 30000
-    print("Apne", Total, "Dhanrashi prapt ki hain")
-    time.sleep(2)
-    if r != True:
-        print("Apka Din Shubh ho")
-        update_score("Kaun Banega Lakhpati", Total)
-        return
-    sawal("Chautha")
-    time.sleep(3)
-    q4 = ["How many pillar are there in Indian Democracy", "Option A: 3", "Option B: 6", "Option C: 2", "Option D: 4"]
-    ques(q4)
-    r = check("D")
-    Total += 40000
-    print("Apne", Total, "Dhanrashi prapt ki hain")
-    time.sleep(2)
-    if r != True:
-        print("Apka Din Shubh ho")
-        update_score("Kaun Banega Lakhpati", Total)
-        return
-    sawal("Akri")
-    time.sleep(3)
-    q5 = ["How many presidents were there for India", "Option A: 20", "Option B: 15", "Option C: 25", "Option D: 30"]
-    ques(q5)
-    r = check("B")
-    Total += 50000
-    print("Apne", Total, "Dhanrashi prapt ki hain")
-    time.sleep(2)
-    if r != True:
-        print("Apka Din Shubh ho")
-        update_score("Kaun Banega Lakhpati", Total)
-        return
-    print("Or ishi ke sath Apne 'Kaun Banega Lakhpati' ke adbhud khel koh khatam kiya h apka din shudh ho")
-    time.sleep(2)
-    update_score("Kaun Banega Lakhpati", Total)
-    return
+    quiz = Quiz(scene)
+    quiz.start_quiz()

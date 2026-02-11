@@ -1,13 +1,18 @@
-# Adventure game logic
+# Import required modules
 import time
 from score import update_score
 
+# Define Adventure class
 class Adventure:
-    def __init__(self, scenes):# Initialize with scenes
+    # Initialize with scenes
+    def __init__(self, scenes):
         self.scenes = scenes
         self.state = "start"
 
+    # Play the adventure game
     def play(self):
+        print("Welcome To The Game'Text Adventure'")
+        player=input("Enter The Player Name: ").title()
         while True:# Main game loop
             scene = self.scenes[self.state]
             print(scene["text"])
@@ -15,7 +20,7 @@ class Adventure:
 
             if not scene["choice"]:# Check for end of game
                 print("Game Over and your score is", scene["point"])
-                update_score("Text Adventure", scene["point"])
+                update_score("Text Adventure",player,scene["point"])
                 return
             for option, nex in scene["choice"].items():
                 print(f"{option}:{nex}")
@@ -28,7 +33,8 @@ class Adventure:
             else:
                 print("Invalid Option")
                 continue
-
+            
+# Define game scenes
 scenes = {
     "start": {
         "text": "You are in forest entrance",
