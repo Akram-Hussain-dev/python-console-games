@@ -4,52 +4,21 @@ import json
 # Helper functions to load and save scores
 # Load scores from a JSON file
 def load_scores():
-    try:  # Load scores from a JSON file and normalize to lists
-        with open("scores.json", "r") as f:
-            try:
-                data = json.load(f)
-            except json.JSONDecodeError:
-                # empty or invalid JSON
-                return {}
+    try:
+        with open("scores.json","r") as f:
+            return json.load(f)
     except FileNotFoundError:
+        #create file automatically
+        with open("scores.json","w") as f:
+            json.dump({},f)
+        return {} 
+    except json.JSONDecodeError:
         return {}
-    # Normalize player scores to lists (support legacy single-int values)
-    for game, players in list(data.items()):
-        if not isinstance(players, dict):
-            data[game] = {}
-            continue
-        for player, val in list(players.items()):
-            if isinstance(val, list):
-                # ensure all elements are ints
-                data[game][player] = [int(x) for x in val if isinstance(x, (int, float, str)) and str(x).lstrip('-').isdigit()]
-            else:
-                try:
-                    data[game][player] = [int(val)]
-                except Exception:
-                    data[game][player] = []
-    return data
 
 # Save scores to a JSON file
 def save_scores(scores):
-    # write JSON with arrays on single lines
-    with open("scores.json", "w") as f:
-        f.write("{\n")
-        items = list(scores.items())
-        for i, (game, players) in enumerate(items):
-            f.write(f'    "{game}": ' + "{\n")
-            player_items = list(players.items())
-            for j, (player, scores_list) in enumerate(player_items):
-                f.write(f'        "{player}": {json.dumps(scores_list)}')
-                if j < len(player_items) - 1:
-                    f.write(",\n")
-                else:
-                    f.write("\n")
-            f.write("    }")
-            if i < len(items) - 1:
-                f.write(",\n")
-            else:
-                f.write("\n")
-        f.write("}")
+    with open("scores.json","w") as f:
+        json.dump(scores,f, indent=4)
 
 # Update the score for a specific game
 def update_score(game_name,player_name,new_score):
@@ -65,12 +34,10 @@ def update_score(game_name,player_name,new_score):
     players = scores[game_name]
 
     # Keep a list of scores per player and retain the top 3
-    lst = players.get(player_name, [])
-    if not isinstance(lst, list):
-        lst = [int(lst)] if str(lst).lstrip('-').isdigit() else []
-    lst.append(new_score)
-    lst = sorted([int(x) for x in lst], reverse=True)[:3]
-    players[player_name] = lst
+    scores_list = players.get(player_name, [])
+    scores_list.append(new_score)
+    scores_list = sorted([int(x) for x in scores_list], reverse=True)[:3]
+    players[player_name] = scores_list
     save_scores(scores)
     return True
 
